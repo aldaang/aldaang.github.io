@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+<script src="./d3.v3.min.js" type="text/javascript"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
+
+<head>
+
+<title>
+	CPSC583 Project
+</title>
+
+<style>
+body {
+	font-family: 'Open Sans', sans-serif;
+}
+
+#header {
+	background-color: black;
+	color: white;
+	text-align: center;
+	padding: 5px;
+}
+
+#artistFilterOptions {
+	background-color: #eeeeee;
+	height: 750px;
+	width: 300px;
+	float: left;
+	padding: 5px;
+	overflow-y: auto;
+}
+
+#radarChart {
+	float: left;
+	padding: 25px;
+}
+
+#chart {
+	background-color: gray;
+	color: white;
+	clear: both;
+	text-align: center;
+	padding: 5px;
+	height: 500px;
+}
+
+#graphics {
+	padding: 5px;
+	height: 500px;
+}
+
+rect.bar {
+	fill: white;
+	stroke: black;
+	stroke-width: 1px;
+}
+
+rect.bar:hover {
+	fill: orange;
+	stroke: black;
+	stroke-width: 1px;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+	<div id="header">
+	<h1>Hip-hop Artists & How They Compose Their Songs</h1>
+	</div>
+
+	<div id="artistFilterOptions">
+		<input class="artistFilterButton" id="0" type="checkbox" onclick="handleClick(this);">2Pac</input><br>
+		<input class="artistFilterButton" id="1" type="checkbox" onclick="handleClick(this);">8Ball and MJG</input><br>
+		<input class="artistFilterButton" id="2" type="checkbox" onclick="handleClick(this);">Afrika Bambaataa</input><br>
+		<input class="artistFilterButton" id="3" type="checkbox" onclick="handleClick(this);">Akrobatik</input><br>
+		<input class="artistFilterButton" id="4" type="checkbox" onclick="handleClick(this);">Armand Van Helden</input><br>
+		<input class="artistFilterButton" id="5" type="checkbox" onclick="handleClick(this);">Army of the Pharaohs</input><br>
+		<input class="artistFilterButton" id="6" type="checkbox" onclick="handleClick(this);">Baby Bash</input><br>
+		<input class="artistFilterButton" id="7" type="checkbox" onclick="handleClick(this);">Beastie Boys</input><br>
+		<input class="artistFilterButton" id="8" type="checkbox" onclick="handleClick(this);">Beat Junkies</input><br>
+		<input class="artistFilterButton" id="9" type="checkbox" onclick="handleClick(this);">Big Pun</input><br>
+		<input class="artistFilterButton" id="10" type="checkbox" onclick="handleClick(this);">Big Tymers</input><br>
+		<input class="artistFilterButton" id="11" type="checkbox" onclick="handleClick(this);">Blazin' Squad</input><br>
+		<input class="artistFilterButton" id="12" type="checkbox" onclick="handleClick(this);">B-Legit</input><br>
+		<input class="artistFilterButton" id="13" type="checkbox" onclick="handleClick(this);">Bone Thugs N Harmony</input><br>
+		<input class="artistFilterButton" id="14" type="checkbox" onclick="handleClick(this);">Bow Wow</input><br>
+		<input class="artistFilterButton" id="15" type="checkbox" onclick="handleClick(this);">Boyz N Da Hood</input><br>
+		<input class="artistFilterButton" id="16" type="checkbox" onclick="handleClick(this);">Brother Ali</input><br>
+		<input class="artistFilterButton" id="17" type="checkbox" onclick="handleClick(this);">Cam'ron</input><br>
+		<input class="artistFilterButton" id="18" type="checkbox" onclick="handleClick(this);">Cee Lo Green</input><br>
+		<input class="artistFilterButton" id="19" type="checkbox" onclick="handleClick(this);">Chingy</input><br>
+		<input class="artistFilterButton" id="20" type="checkbox" onclick="handleClick(this);">Clipse</input><br>
+		<input class="artistFilterButton" id="21" type="checkbox" onclick="handleClick(this);">Common Market</input><br>
+		<input class="artistFilterButton" id="22" type="checkbox" onclick="handleClick(this);">Damian Marley</input><br>
+		<input class="artistFilterButton" id="23" type="checkbox" onclick="handleClick(this);">dead prez</input><br>
+		<input class="artistFilterButton" id="24" type="checkbox" onclick="handleClick(this);">Del the Funky Homosapien</input><br>
+		<input class="artistFilterButton" id="25" type="checkbox" onclick="handleClick(this);">Dem Franchize Boyz</input><br>
+		<input class="artistFilterButton" id="26" type="checkbox" onclick="handleClick(this);">Diddy</input><br>
+		<input class="artistFilterButton" id="27" type="checkbox" onclick="handleClick(this);">Dilated Peoples</input><br>
+		<input class="artistFilterButton" id="28" type="checkbox" onclick="handleClick(this);">DJ Babu</input><br>
+		<input class="artistFilterButton" id="29" type="checkbox" onclick="handleClick(this);">DJ Khaled</input><br>
+		<input class="artistFilterButton" id="30" type="checkbox" onclick="handleClick(this);">Dragon Ash</input><br>
+		<input class="artistFilterButton" id="31" type="checkbox" onclick="handleClick(this);">E-40</input><br>
+		<input class="artistFilterButton" id="32" type="checkbox" onclick="handleClick(this);">Eminem</input><br>
+		<input class="artistFilterButton" id="33" type="checkbox" onclick="handleClick(this);">Frankie Cutlass</input><br>
+		<input class="artistFilterButton" id="34" type="checkbox" onclick="handleClick(this);">Frank-N-Dank</input><br>
+		<input class="artistFilterButton" id="35" type="checkbox" onclick="handleClick(this);">Freestyle Fellowship</input><br>
+		<input class="artistFilterButton" id="36" type="checkbox" onclick="handleClick(this);">Grafh</input><br>
+		<input class="artistFilterButton" id="37" type="checkbox" onclick="handleClick(this);">Gucci Mane</input><br>
+		<input class="artistFilterButton" id="38" type="checkbox" onclick="handleClick(this);">Gym Class Heroes</input><br>
+		<input class="artistFilterButton" id="39" type="checkbox" onclick="handleClick(this);">GZA</input><br>
+		<input class="artistFilterButton" id="40" type="checkbox" onclick="handleClick(this);">Hieroglyphics</input><br>
+		<input class="artistFilterButton" id="41" type="checkbox" onclick="handleClick(this);">Ice Cube</input><br>
+		<input class="artistFilterButton" id="42" type="checkbox" onclick="handleClick(this);">J Dilla</input><br>
+		<input class="artistFilterButton" id="43" type="checkbox" onclick="handleClick(this);">Jay-Z</input><br>
+		<input class="artistFilterButton" id="44" type="checkbox" onclick="handleClick(this);">Jeezy</input><br>
+		<input class="artistFilterButton" id="45" type="checkbox" onclick="handleClick(this);">J-Live</input><br>
+		<input class="artistFilterButton" id="46" type="checkbox" onclick="handleClick(this);">JT The Bigga Figga</input><br>
+		<input class="artistFilterButton" id="47" type="checkbox" onclick="handleClick(this);">Kanye West</input><br>
+		<input class="artistFilterButton" id="48" type="checkbox" onclick="handleClick(this);">Kriss Kross</input><br>
+		<input class="artistFilterButton" id="49" type="checkbox" onclick="handleClick(this);">La the Darkman</input><br>
+		<input class="artistFilterButton" id="50" type="checkbox" onclick="handleClick(this);">Lil Rob</input><br>
+		<input class="artistFilterButton" id="51" type="checkbox" onclick="handleClick(this);">Lil' Troy</input><br>
+		<input class="artistFilterButton" id="52" type="checkbox" onclick="handleClick(this);">Lil Wayne</input><br>
+		<input class="artistFilterButton" id="53" type="checkbox" onclick="handleClick(this);">Luniz</input><br>
+		<input class="artistFilterButton" id="54" type="checkbox" onclick="handleClick(this);">Lupe Fiasco</input><br>
+		<input class="artistFilterButton" id="55" type="checkbox" onclick="handleClick(this);">Macklemore</input><br>
+		<input class="artistFilterButton" id="56" type="checkbox" onclick="handleClick(this);">Madlib</input><br>
+		<input class="artistFilterButton" id="57" type="checkbox" onclick="handleClick(this);">Matronix</input><br>
+		<input class="artistFilterButton" id="58" type="checkbox" onclick="handleClick(this);">MED</input><br>
+		<input class="artistFilterButton" id="59" type="checkbox" onclick="handleClick(this);">Mellow Man Ace</input><br>
+		<input class="artistFilterButton" id="60" type="checkbox" onclick="handleClick(this);">Missy Elliot</input><br>
+		<input class="artistFilterButton" id="61" type="checkbox" onclick="handleClick(this);">Mistah F.A.B.</input><br>
+		<input class="artistFilterButton" id="62" type="checkbox" onclick="handleClick(this);">Mix Master Mike</input><br>
+		<input class="artistFilterButton" id="63" type="checkbox" onclick="handleClick(this);">Mobb Deep</input><br>
+		<input class="artistFilterButton" id="64" type="checkbox" onclick="handleClick(this);">Mr. Lil One</input><br>
+		<input class="artistFilterButton" id="65" type="checkbox" onclick="handleClick(this);">N.O.R.E.</input><br>
+		<input class="artistFilterButton" id="66" type="checkbox" onclick="handleClick(this);">Nas</input><br>
+		<input class="artistFilterButton" id="67" type="checkbox" onclick="handleClick(this);">Nelly</input><br>
+		<input class="artistFilterButton" id="68" type="checkbox" onclick="handleClick(this);">Non-Prophets</input><br>
+		<input class="artistFilterButton" id="69" type="checkbox" onclick="handleClick(this);">Ol' Dirty Bastard</input><br>
+		<input class="artistFilterButton" id="70" type="checkbox" onclick="handleClick(this);">Panjabi MC</input><br>
+		<input class="artistFilterButton" id="71" type="checkbox" onclick="handleClick(this);">Peedi Peedi</input><br>
+		<input class="artistFilterButton" id="72" type="checkbox" onclick="handleClick(this);">Pharrell Williams</input><br>
+		<input class="artistFilterButton" id="73" type="checkbox" onclick="handleClick(this);">Phat Kat</input><br>
+		<input class="artistFilterButton" id="74" type="checkbox" onclick="handleClick(this);">Pitbull</input><br>
+		<input class="artistFilterButton" id="75" type="checkbox" onclick="handleClick(this);">Play-N-Skills</input><br>
+		<input class="artistFilterButton" id="76" type="checkbox" onclick="handleClick(this);">Plies</input><br>
+		<input class="artistFilterButton" id="77" type="checkbox" onclick="handleClick(this);">Royce da 5'9"</input><br>
+		<input class="artistFilterButton" id="78" type="checkbox" onclick="handleClick(this);">Sir Mix-A-Lot</input><br>
+		<input class="artistFilterButton" id="79" type="checkbox" onclick="handleClick(this);">Skee-Lo</input><br>
+		<input class="artistFilterButton" id="80" type="checkbox" onclick="handleClick(this);">Slum Village</input><br>
+		<input class="artistFilterButton" id="81" type="checkbox" onclick="handleClick(this);">Smoothe Da Hustler</input><br>
+		<input class="artistFilterButton" id="82" type="checkbox" onclick="handleClick(this);">Snoop Dogg</input><br>
+		<input class="artistFilterButton" id="83" type="checkbox" onclick="handleClick(this);">Soulja Boy</input><br>
+		<input class="artistFilterButton" id="84" type="checkbox" onclick="handleClick(this);">Strange Fruit Project</input><br>
+		<input class="artistFilterButton" id="85" type="checkbox" onclick="handleClick(this);">Thaitanium</input><br>
+		<input class="artistFilterButton" id="86" type="checkbox" onclick="handleClick(this);">The Chicarones</input><br>
+		<input class="artistFilterButton" id="87" type="checkbox" onclick="handleClick(this);">The Diplomats</input><br>
+		<input class="artistFilterButton" id="88" type="checkbox" onclick="handleClick(this);">The Perceptionists</input><br>
+		<input class="artistFilterButton" id="89" type="checkbox" onclick="handleClick(this);">The Pharcyde</input><br>
+		<input class="artistFilterButton" id="90" type="checkbox" onclick="handleClick(this);">The Sugarhill Gang</input><br>
+		<input class="artistFilterButton" id="91" type="checkbox" onclick="handleClick(this);">Three 6 Mafia</input><br>
+		<input class="artistFilterButton" id="92" type="checkbox" onclick="handleClick(this);">Tinchy Stryder</input><br>
+		<input class="artistFilterButton" id="93" type="checkbox" onclick="handleClick(this);">Too $hort</input><br>
+		<input class="artistFilterButton" id="94" type="checkbox" onclick="handleClick(this);">Trae</input><br>
+		<input class="artistFilterButton" id="95" type="checkbox" onclick="handleClick(this);">Uncle Murda</input><br>
+		<input class="artistFilterButton" id="96" type="checkbox" onclick="handleClick(this);">Will Smith</input><br>
+		<input class="artistFilterButton" id="97" type="checkbox" onclick="handleClick(this);">Wiz Khalifa</input><br>
+		<input class="artistFilterButton" id="98" type="checkbox" onclick="handleClick(this);">Yo Gotti</input><br>
+		<input class="artistFilterButton" id="99" type="checkbox" onclick="handleClick(this);">Yung Joc</input><br>
+	</div>
+
+	<div class="radarChart"> </div>
+	<script src="./radarChart.js" type="text/javascript"></script>
+	<script src="./Averages.js" type="text/javascript"></script>
+
+	<script>
+		var margin = {
+			top: 100,
+			right: 100,
+			bottom: 100,
+			left: 100
+		},
+			width = Math.min(900, window.innerWidth - 10) - margin.left - margin.right,
+			height = Math.min(width, window.innerHeight - margin.top - margin.bottom - 20);
+			
+		var color = d3.scale.category10();
+
+		var radarChartOptions = {
+			w: width,
+			h: height,
+			margin: margin,
+			maxValue: 0.5,
+			levels: 5,
+			roundStrokes: true,
+			color: color
+		};
+	</script>
+	
+	<div id="chart">
+		<svg id="graphics">
+		</svg>
+	</div>
+	
+	<div id="buttons">
+	
+	</div>
+	
+</body>
+
+</html>
